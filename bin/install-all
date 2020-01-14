@@ -1,0 +1,5 @@
+#!/bin/bash
+
+pnpm --recursive install
+pnpm --recursive update
+pnpm store prune

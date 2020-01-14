@@ -1,8 +1,14 @@
-dependencies:
-  uWebSockets.js: github.com/uNetworking/uWebSockets.js/e7afaaf5c96311578b3c4477f662d02aab2e41ec
-devDependencies:
-  chai: 4.2.0
-  mocha: 7.0.0
+importers:
+  .:
+    dependencies:
+      uWebSockets.js: github.com/uNetworking/uWebSockets.js/e7afaaf5c96311578b3c4477f662d02aab2e41ec
+    devDependencies:
+      chai: 4.2.0
+      mocha: 7.0.0
+    specifiers:
+      chai: ^4.2.0
+      mocha: ^7.0.0
+      uWebSockets.js: 'github:uNetworking/uWebSockets.js#v17.0.0'
 lockfileVersion: 5.1
 packages:
   /ansi-colors/3.2.3:
@@ -779,7 +785,3 @@ packages:
       registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/e7afaaf5c96311578b3c4477f662d02aab2e41ec'
     version: 17.0.0
-specifiers:
-  chai: ^4.2.0
-  mocha: ^7.0.0
-  uWebSockets.js: 'github:uNetworking/uWebSockets.js#v17.0.0'
