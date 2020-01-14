@@ -1,0 +1,21 @@
+{
+  "name": "libwss",
+  "version": "0.0.0",
+  "description": "websocket server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wss"
+  ],
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v17.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0"
+  }
+}
