@@ -4,7 +4,8 @@
   "description": "common stuff",
   "files": [
     "constants/*",
-    "errors/*"
+    "errors/*",
+    "libmacaroons/*"
   ],
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
   "license": "MIT"

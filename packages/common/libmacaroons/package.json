@@ -1,0 +1,14 @@
+{
+  "name": "libmacaroons",
+  "version": "0.0.0",
+  "description": "macaroons related stuff",
+  "main": "writer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "macaroons"
+  ],
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT"
+}
