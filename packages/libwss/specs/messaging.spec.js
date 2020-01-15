@@ -62,6 +62,11 @@ describe('libWss', () => {
       // eslint-disable-next-line
       open: (ws, req) => {
         debuglog(`websocket connected via ${req.getUrl()}`);
+        const xToken = req.getHeader(Constants.token.name) || null;
+
+        if (xToken === null) {
+          ws.end(401, 'not authenticated');
+        }
       },
       // eslint-disable-next-line
       message: (ws, message, isBinary) => {
@@ -110,6 +115,9 @@ describe('libWss', () => {
     const client = new WebSocket(address, [], {
       rejectUnauthorized: false,
       perMessageDeflate: false,
+      headers: {
+        [Constants.token.name]: 'x-token-value',
+      },
     });
 
     client.binaryType = 'arraybuffer'; // consider using 'fragments' on large data frames

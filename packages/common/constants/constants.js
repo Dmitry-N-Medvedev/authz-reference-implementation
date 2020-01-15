@@ -4,4 +4,7 @@ module.exports = {
       WssServer: 'libwss',
     },
   },
+  token: {
+    name: 'x-adv-token',
+  },
 };
