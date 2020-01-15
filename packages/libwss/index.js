@@ -16,7 +16,7 @@ module.exports = class libWssServer {
 
   #listen_socket = null;
 
-  is_running() {
+  get is_running() {
     return this.#listen_socket !== null;
   }
 
@@ -35,7 +35,8 @@ module.exports = class libWssServer {
       throw new WssServerEmptyConfigError();
     }
 
-    this.#server = uWS.SSLApp(this.#config.server)
+    this.#server = uWS
+      .SSLApp(this.#config.ssl)
       .ws('/wss', this.#config.ws)
       // eslint-disable-next-line no-unused-vars
       .post('/calc', (res, req) => {

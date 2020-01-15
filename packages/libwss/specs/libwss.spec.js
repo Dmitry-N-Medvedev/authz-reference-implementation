@@ -3,7 +3,7 @@
 require('dotenv').config({
   path: 'specs/.env',
 });
-
+const { resolve } = require('path');
 const util = require('util');
 const {
   before,
@@ -20,9 +20,9 @@ const LibWssServer = require('../index.js');
 
 
 const serverConfig = {
-  server: {
-    key_file_name: process.env.WSS_KEY_FILE_NAME,
-    cert_file_name: process.env.WSS_CERT_FILE_NAME,
+  ssl: {
+    key_file_name: resolve(process.env.WSS_KEY_FILE_NAME),
+    cert_file_name: resolve(process.env.WSS_CERT_FILE_NAME),
   },
   ws: {},
   port: parseInt(process.env.WSS_PORT, 10),
@@ -45,6 +45,9 @@ describe('libWss', () => {
 
   it.only('should start/stop WebSocket Server', async () => {
     const ws = {
+      compression: 0,
+      maxPayloadLength: 16 * 1024 * 1024,
+      idleTimeout: 10,
       // eslint-disable-next-line
       open: (ws, req) => {
         debuglog(`websocket connected via ${req.getUrl()}`);
@@ -58,7 +61,7 @@ describe('libWss', () => {
         debuglog(`socket closed w/ ${code} and ${message}`);
       },
     };
-    const conf = Object.assign(serverConfig, ws);
+    const conf = Object.assign(Object.create(null), serverConfig, { ws });
 
     await LibWss.start(conf);
 
