@@ -14,8 +14,7 @@
   "scripts": {
     "lint": "eslint ./ --fix",
     "pretest": "pnpm run lint && pnpm audit",
-    "test0": "cross-env NODE_ENV=test NODE_DEBUG=libwss nyc ./node_modules/.bin/mocha",
-    "test": "cross-env NODE_ENV=test NODE_DEBUG=libwss ./node_modules/.bin/mocha",
+    "test": "cross-env NODE_ENV=test NODE_DEBUG=libwss nyc ./node_modules/.bin/mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
@@ -55,6 +54,7 @@
     "throw-deprecation": true,
     "bail": true,
     "exit": true,
+    "recursive": true,
     "spec": "./specs/*.spec.js"
   },
   "nyc": {
@@ -85,5 +85,9 @@
         95
       ]
     }
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   }
 }

@@ -8,7 +8,6 @@ const WssServerEmptyConfigError = require('./errors/WssServerEmptyConfigError.js
 const WssServerAlreadyStartedError = require('./errors/WssServerAlreadyStartedError.js');
 const is_object_empty = require('../common/helpers/is_object_empty.js');
 
-
 module.exports = class libWssServer {
   #config = null;
 
@@ -35,9 +34,10 @@ module.exports = class libWssServer {
       throw new WssServerEmptyConfigError();
     }
 
+
     this.#server = uWS
       .SSLApp(this.#config.ssl)
-      .ws('/wss', this.#config.ws)
+      .ws(config.path, this.#config.handlers)
       // eslint-disable-next-line no-unused-vars
       .post('/calc', (res, req) => {
         res.end('OK');
@@ -46,10 +46,11 @@ module.exports = class libWssServer {
         this.#listen_socket = token;
 
         if (this.#listen_socket) {
-          debuglog(`WssServer started on ${this.#config.port}`);
+          debuglog(`WssServer started on ${this.#config.port} `);
           return Promise.resolve();
         }
-        debuglog(`failed to start on ${this.#config.port}`);
+
+        debuglog(`failed to start on ${this.#config.port} `);
         return Promise.reject();
       });
   }
