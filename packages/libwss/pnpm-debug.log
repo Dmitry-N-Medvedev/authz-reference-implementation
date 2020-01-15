@@ -1,0 +1,22 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/Users/dmitrymedvedev/Downloads/projects/authz-reference-implementation"
+  },
+  "1 error pnpm": {
+    "message": {
+      "errno": 1,
+      "code": "ELIFECYCLE",
+      "pkgid": "libwss@0.0.0",
+      "stage": "test",
+      "script": "cross-env NODE_ENV=test NODE_DEBUG=libwss ./node_modules/.bin/mocha",
+      "pkgname": "libwss"
+    },
+    "err": {
+      "name": "Error",
+      "message": "libwss@0.0.0 test: `cross-env NODE_ENV=test NODE_DEBUG=libwss ./node_modules/.bin/mocha`\nExit status 1",
+      "code": "ELIFECYCLE",
+      "stack": "Error: libwss@0.0.0 test: `cross-env NODE_ENV=test NODE_DEBUG=libwss ./node_modules/.bin/mocha`\nExit status 1\n    at EventEmitter.<anonymous> (/Users/dmitrymedvedev/.nvm/versions/node/v13.6.0/pnpm-global/3/node_modules/.pnpm/registry.npmjs.org/pnpm/4.7.2/node_modules/pnpm/lib/node_modules/@zkochan/npm-lifecycle/index.js:302:16)\n    at EventEmitter.emit (events.js:321:20)\n    at ChildProcess.<anonymous> (/Users/dmitrymedvedev/.nvm/versions/node/v13.6.0/pnpm-global/3/node_modules/.pnpm/registry.npmjs.org/pnpm/4.7.2/node_modules/pnpm/lib/node_modules/@zkochan/npm-lifecycle/lib/spawn.js:55:14)\n    at ChildProcess.emit (events.js:321:20)\n    at maybeClose (internal/child_process.js:1028:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5)"
+    }
+  }
+}

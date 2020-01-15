@@ -2,9 +2,21 @@
   "name": "libwss",
   "version": "0.0.0",
   "description": "websocket server",
-  "main": "index.js",
+  "main": "index.mjs",
+  "engines": {
+    "node": ">=13.6.0",
+    "pnpm": ">=4.7.2"
+  },
+  "engineStrict": true,
+  "files": [
+    "../common/constants/constants.mjs"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ./ --fix",
+    "pretest": "pnpm run lint && pnpm audit",
+    "test0": "cross-env NODE_ENV=test NODE_DEBUG=libwss nyc ./node_modules/.bin/mocha",
+    "test": "cross-env NODE_ENV=test NODE_DEBUG=libwss ./node_modules/.bin/mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "wss"
@@ -12,10 +24,66 @@
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "supports-color": "^7.1.0",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v17.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
-    "mocha": "^7.0.0"
+    "coveralls": "^3.0.9",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-chai-friendly": "^0.5.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.0.0",
+    "got": "^10.2.2",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
+    "ws": "^7.2.1"
+  },
+  "mocha": {
+    "colors": true,
+    "timeout": 0,
+    "slow": 50,
+    "check-leaks": true,
+    "full-trace": true,
+    "reporter": "spec",
+    "inline-diffs": true,
+    "throw-deprecation": true,
+    "bail": true,
+    "exit": true,
+    "spec": "./specs/*.spec.js"
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "**/*.spec.js",
+      "**/.eslintrc.js"
+    ],
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80,
+    "watermarks": {
+      "lines": [
+        80,
+        95
+      ],
+      "functions": [
+        80,
+        95
+      ],
+      "branches": [
+        80,
+        95
+      ],
+      "statements": [
+        80,
+        95
+      ]
+    }
   }
 }

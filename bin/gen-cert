@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir packages/libwss/specs/ssl 2>&1
+
+mkcert \
+  -key-file packages/libwss/specs/ssl/key.pem \
+  -cert-file packages/libwss/specs/ssl/cert.pem \
+  localhost 127.0.0.1
