@@ -19,6 +19,9 @@ const {
 
 const WebSocket = require('ws');
 const Constants = require('../../common/constants/constants.js');
+const m_ctor = require('../../common/libmacaroons/m_ctor');
+const m_verify = require('../../common/libmacaroons/m_verify');
+const m_add_first_party_caveats = require('../../common/libmacaroons/m_add_first_party_caveats');
 
 const debuglog = util.debuglog(`${Constants.debug.tokens.WssServer}:spec`);
 
@@ -58,6 +61,18 @@ describe('libWss', () => {
 
   // eslint-disable-next-line no-async-promise-executor
   it.only('should send/receive a message', async () => new Promise(async (ok) => {
+    const key = Buffer.from(process.env.M_KEY, 'hex');
+    const location = process.env.M_LOC;
+    const identifier = process.env.M_IDT;
+
+    const caveats = [{
+      account: 'c6df5049-c6fc-4ab9-b58f-4ffb6b3f99fb',
+    },
+    {
+      poi: '00:1B:44:11:3A:B7',
+    },
+    ];
+
     const handlers = {
       // eslint-disable-next-line
       open: (ws, req) => {
@@ -67,6 +82,8 @@ describe('libWss', () => {
         if (xToken === null) {
           ws.end(401, 'not authenticated');
         }
+
+        ws.xToken = xToken;
       },
       // eslint-disable-next-line
       message: (ws, message, isBinary) => {
@@ -76,12 +93,51 @@ describe('libWss', () => {
           debuglog('message received is not binary. closing');
           ws.close();
         } else {
-          ws.send(message, isBinary);
+          const command = JSON.parse(
+            (new TextDecoder()).decode(message),
+          );
+
+          debuglog(command);
+
+          let calc_result = null;
+
+          try {
+            calc_result = handlers.functions[command.op](command.args, ws.xToken);
+            debuglog(calc_result);
+            ws.send((new TextEncoder()).encode(JSON.stringify(calc_result)), isBinary);
+          } catch (e) {
+            ws.close(401, 'not authorized');
+          }
+          // ws.send(message, isBinary);
         }
       },
       // eslint-disable-next-line
       close: (ws, code, message) => {
         debuglog(`socket closed w/ ${code} and ${message}`);
+      },
+    };
+
+    handlers.functions = {
+      add: ([a, b], token) => {
+        const verification_result = handlers.functions.add.macaroons.check(token);
+
+        if (verification_result === false) {
+          throw new Error('verification failed');
+        }
+
+        return a + b;
+      },
+    };
+
+    handlers.functions.add.macaroons = {
+      check: (token) => {
+        const is_verified = m_verify({
+          macaroon: token,
+          key,
+          caveats,
+        });
+
+        return is_verified;
       },
     };
 
@@ -104,19 +160,27 @@ describe('libWss', () => {
       return Promise.resolve();
     };
     const message = JSON.stringify({
-      type: 'some-type',
-      payload: [0, 1, 2],
+      op: 'add',
+      args: [1, 2],
+    });
+    const macaroon = m_ctor({
+      location,
+      key,
+      identifier,
+    });
+    const client_token = m_add_first_party_caveats({
+      macaroon,
+      caveats,
     });
     const binaryMessage = (new TextEncoder()).encode(message).buffer;
 
     await start();
 
-
     const client = new WebSocket(address, [], {
       rejectUnauthorized: false,
       perMessageDeflate: false,
       headers: {
-        [Constants.token.name]: 'x-token-value',
+        [Constants.token.name]: client_token,
       },
     });
 
@@ -139,9 +203,9 @@ describe('libWss', () => {
     });
 
     client.on('message', (data) => {
-      const msg = (new TextDecoder()).decode(data);
+      const sum = parseInt((new TextDecoder()).decode(data), 10);
 
-      expect(msg).to.equal(message);
+      expect(sum).to.equal((JSON.parse(message)).args.reduce((acc, val) => acc + val, 0));
 
       client.close(1000, 'bye');
     });

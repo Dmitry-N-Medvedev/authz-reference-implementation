@@ -2,7 +2,7 @@
   "name": "libwss",
   "version": "0.0.0",
   "description": "websocket server",
-  "main": "index.mjs",
+  "main": "index.js",
   "engines": {
     "node": ">=13.6.0",
     "pnpm": ">=4.7.2"
